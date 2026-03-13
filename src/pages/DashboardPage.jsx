@@ -18,7 +18,7 @@ export default function DashboardPage() {
 
   const fetchSummary = () => {
     if (!user) return;
-    setLoading(true);
+    setLoading(true); 
     client.get(`/api/users/${user.id}/summary`)
       .then(({ data }) => {
         setSummary(data);
