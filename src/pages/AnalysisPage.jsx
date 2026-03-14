@@ -43,7 +43,7 @@ export default function AnalysisPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 dark:from-slate-950 dark:to-slate-900">
       <Navbar />
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
@@ -55,8 +55,8 @@ export default function AnalysisPage() {
         </div>
 
         {/* Agent Pipeline */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Agent Pipeline</h2>
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 p-6 mb-6">
+          <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">Agent Pipeline</h2>
           <div className="space-y-3">
             {AGENTS.map((agent, i) => {
               const isDone = activeStep > i || activeStep === 5;
@@ -65,7 +65,7 @@ export default function AnalysisPage() {
                 <div key={agent.key} className={`flex items-center gap-4 p-3 rounded-xl transition-all ${
                   isActive ? 'bg-indigo-50 border border-indigo-200' :
                   isDone   ? 'bg-green-50 border border-green-200' :
-                             'bg-gray-50 border border-gray-100'
+                             'bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700'
                 }`}>
                   <div className="flex-shrink-0">
                     {isDone ? <CheckCircle className="text-green-500" size={20} /> :
@@ -104,7 +104,7 @@ export default function AnalysisPage() {
           <div className="space-y-4">
 
             {/* Health Score */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 p-6 mb-6">
               <h2 className="text-lg font-bold text-gray-800 mb-4">Financial Health</h2>
               <div className="flex items-center gap-6">
                 <div className={`text-5xl font-bold ${
@@ -152,7 +152,7 @@ export default function AnalysisPage() {
             </div>
 
             {/* Loan Forecasts */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 p-6 mb-6">
               <h2 className="text-lg font-bold text-gray-800 mb-4">Loan Projections</h2>
               <div className="space-y-3">
                 {result.forecast.projections.map((p, i) => (

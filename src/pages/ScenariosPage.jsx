@@ -41,7 +41,7 @@ export default function ScenariosPage() {
   }, [selectedLoan, extraPayment]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 dark:from-slate-950 dark:to-slate-900">
       <Navbar />
       <div className="max-w-3xl mx-auto px-4 py-8">
 
@@ -60,7 +60,7 @@ export default function ScenariosPage() {
         ) : (
           <>
             {/* Controls */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 p-6 mb-6">
 
               {/* Loan selector */}
               <div className="mb-6">
@@ -75,7 +75,7 @@ export default function ScenariosPage() {
                       className={`flex items-center justify-between p-4 rounded-xl border-2 text-left transition ${
                         selectedLoan?.id === loan.id
                           ? 'border-indigo-400 bg-indigo-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          : 'border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:hover:border-slate-600 dark:bg-slate-800'
                       }`}
                     >
                       <div>
@@ -147,8 +147,8 @@ export default function ScenariosPage() {
 
                 {/* Before vs After */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+                  <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 p-5 shadow-sm">
+                    <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3">
                       Without Extra Payment
                     </p>
                     <div className="space-y-3">
