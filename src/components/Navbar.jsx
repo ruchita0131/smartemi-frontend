@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, LayoutDashboard, Brain } from 'lucide-react';
+import { LogOut, LayoutDashboard, Brain, Zap } from 'lucide-react';
 
 export default function Navbar() {
   const { logout } = useAuth();
@@ -29,6 +29,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           {navItem('/dashboard', 'Dashboard', LayoutDashboard)}
           {navItem('/analysis', 'AI Analysis', Brain)}
+          {navItem('/scenarios', 'Simulator', Zap)}
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 text-sm text-gray-400 hover:text-red-500 transition ml-2"
