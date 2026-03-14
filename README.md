@@ -1,16 +1,106 @@
-# React + Vite
+# SmartEMI Planner — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React dashboard for AI-powered personal loan optimization.
 
-Currently, two official plugins are available:
+## Live Links
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Application: https://smartemi-frontend.vercel.app
+- Backend API: https://smartemi-api.onrender.com/docs
 
-## React Compiler
+## Demo Account
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Field    | Value             |
+|----------|-------------------|
+| Email    | demo@smartemi.in  |
+| Password | demo1234          |
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+
+**Dashboard**
+Real-time financial overview with income, total EMI, expenses, and disposable income. Includes a Debt-to-Income ratio health indicator that color-codes the user's financial situation.
+
+**AI Analysis**
+Animated visualization of the LangGraph pipeline. Each of the 5 agents lights up in sequence as the pipeline runs. Results include financial health score, Avalanche vs Snowball strategy comparison, loan closure projections, and a Gemini AI report with personalized advice.
+
+**Scenario Simulator**
+Interactive slider to simulate extra monthly payments. Shows side-by-side comparison of original vs accelerated repayment timeline, including months saved and total interest saved.
+
+**AI Chat**
+Floating chat widget on every page. The AI has full access to the user's financial profile and answers questions with specific rupee amounts. Persists conversation history within the session.
+
+**Dark Mode**
+System-aware dark and light mode toggle. Preference is saved to localStorage and persists across sessions.
+
+**Profile Dropdown**
+Navbar displays user initials as an avatar. Clicking opens a dropdown with name, email, and account details.
+
+---
+
+## Tech Stack
+
+| Layer       | Technology                            |
+|-------------|---------------------------------------|
+| Framework   | React 19 with Vite                    |
+| Styling     | Tailwind CSS v4                       |
+| Routing     | React Router v6                       |
+| HTTP Client | Axios with JWT interceptors           |
+| Icons       | Lucide React                          |
+| Charts      | Recharts                              |
+| Deployment  | Vercel                                |
+
+---
+
+## Running Locally
+```bash
+git clone https://github.com/ruchita0131/smartemi-frontend
+cd smartemi-frontend
+npm install
+cp .env.example .env.local
+# Set VITE_API_URL in .env.local
+npm run dev
+```
+
+## Environment Variables
+```
+VITE_API_URL=https://smartemi-api.onrender.com
+```
+
+---
+
+## Project Structure
+```
+smartemi-frontend/
+├── src/
+│   ├── App.jsx                  # Routes and app shell
+│   ├── api/
+│   │   └── client.js            # Axios instance with auth interceptor
+│   ├── context/
+│   │   ├── AuthContext.jsx      # Global authentication state
+│   │   └── ThemeContext.jsx     # Dark/light mode state
+│   ├── pages/
+│   │   ├── LoginPage.jsx
+│   │   ├── SignupPage.jsx
+│   │   ├── DashboardPage.jsx
+│   │   ├── AnalysisPage.jsx
+│   │   └── ScenariosPage.jsx
+│   └── components/
+│       ├── Navbar.jsx           # Navigation with profile dropdown
+│       ├── SummaryCard.jsx      # Financial metric card
+│       ├── AgentGraph.jsx       # LangGraph pipeline visualization
+│       ├── AddLoanModal.jsx     # Modal form for adding loans
+│       ├── AddExpenseModal.jsx  # Modal form for adding expenses
+│       └── ChatWidget.jsx       # Floating AI chat interface
+├── .env.example
+└── package.json
+```
+
+---
+
+## Deployment
+
+Frontend is deployed on Vercel with automatic deployments on push to main.
+```bash
+npx vercel --prod
+```
