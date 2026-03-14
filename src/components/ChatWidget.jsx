@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import client from '../api/client';
-import { MessageCircle, X, Send, Brain, Loader } from 'lucide-react';
+import { MessageCircle, X, Send, Brain, Loader, Sparkles } from 'lucide-react';
 
 export default function ChatWidget() {
   const { user } = useAuth();
@@ -9,16 +9,22 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hi! I'm SmartEMI. Ask me anything about your finances — loans, EMIs, savings strategies, or debt payoff timelines. 💬"
+      content: "Hi! I'm SmartEMI Advisor 👋 I know your complete financial profile. Ask me anything about your loans, EMIs, savings, or how to become debt-free faster!"
     }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showHint, setShowHint] = useState(() => !localStorage.getItem('chat_hint_seen'));
   const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const dismissHint = () => {
+    localStorage.setItem('chat_hint_seen', 'true');
+    setShowHint(false);
+  };
 
   const send = async () => {
     if (!input.trim() || loading) return;
@@ -48,47 +54,102 @@ export default function ChatWidget() {
     "Which loan should I pay first?",
     "Can I afford a new loan?",
     "How much am I saving monthly?",
+    "What is my DTI ratio?",
+    "How can I reduce my EMI burden?",
   ];
 
   return (
     <>
-      {/* Floating button */}
-      <button
-        onClick={() => setOpen(o => !o)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 ${
-          open
-            ? 'bg-red-500 hover:bg-red-600 rotate-0'
-            : 'bg-indigo-600 hover:bg-indigo-700'
-        }`}
-      >
-        {open ? <X size={22} className="text-white" /> : <MessageCircle size={22} className="text-white" />}
-      </button>
+      {/* Hint tooltip */}
+      {showHint && !open && (
+        <div className="fixed bottom-28 right-6 z-50 bg-indigo-600 text-white px-4 py-3 rounded-2xl rounded-br-sm shadow-2xl w-72"
+          style={{ animation: 'bounce 2s infinite' }}>
+          <button
+            onClick={dismissHint}
+            className="absolute -top-2 -right-2 w-6 h-6 bg-slate-600 hover:bg-slate-700 rounded-full text-white text-xs flex items-center justify-center"
+          >
+            ×
+          </button>
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles size={16} className="text-yellow-300" />
+            <p className="font-bold text-sm">Ask SmartEMI Advisor!</p>
+          </div>
+          <p className="text-indigo-200 text-xs mb-3">
+            I know your complete financial profile. Ask me anything!
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {suggestions.slice(0, 2).map(s => (
+              <button
+                key={s}
+                onClick={() => { setInput(s); setOpen(true); dismissHint(); }}
+                className="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full transition"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
-      {/* Chat window */}
+      {/* Floating button with pulse */}
+      <div className="fixed bottom-6 right-6 z-50">
+        {!open && (
+          <span className="absolute inset-0 rounded-full bg-indigo-400 opacity-40 animate-ping" />
+        )}
+        <button
+          onClick={() => { setOpen(o => !o); dismissHint(); }}
+          className={`relative w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 ${
+            open
+              ? 'bg-red-500 hover:bg-red-600 scale-95'
+              : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-110'
+          }`}
+        >
+          {open
+            ? <X size={24} className="text-white" />
+            : <MessageCircle size={24} className="text-white" />
+          }
+        </button>
+        {!open && (
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-400 rounded-full border-2 border-white flex items-center justify-center">
+            <span className="text-white text-xs font-bold">AI</span>
+          </span>
+        )}
+      </div>
+
+      {/* Chat window — bigger */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 sm:w-96 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 flex flex-col overflow-hidden"
-          style={{ height: '480px' }}>
-
+        <div
+          className="fixed bottom-28 right-6 z-50 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 flex flex-col overflow-hidden"
+          style={{ width: '420px', height: '560px', maxWidth: 'calc(100vw - 48px)' }}
+        >
           {/* Header */}
-          <div className="bg-indigo-600 p-4 flex items-center gap-3">
-            <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
-              <Brain size={18} className="text-white" />
+          <div className="bg-gradient-to-r from-indigo-600 to-indigo-500 p-4 flex items-center gap-3">
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+              <Brain size={20} className="text-white" />
             </div>
             <div>
-              <p className="font-semibold text-white text-sm">SmartEMI Advisor</p>
+              <p className="font-bold text-white">SmartEMI Advisor</p>
               <p className="text-indigo-200 text-xs">AI-powered • Knows your finances</p>
             </div>
-            <div className="ml-auto w-2 h-2 bg-green-400 rounded-full" />
+            <div className="ml-auto flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <span className="text-xs text-green-300">Online</span>
+            </div>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50 dark:bg-slate-950">
             {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+              <div key={i} className={`flex items-end gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                {msg.role === 'assistant' && (
+                  <div className="w-7 h-7 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Brain size={14} className="text-indigo-600 dark:text-indigo-400" />
+                  </div>
+                )}
+                <div className={`max-w-[78%] px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
                   msg.role === 'user'
                     ? 'bg-indigo-600 text-white rounded-br-sm'
-                    : 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 rounded-bl-sm'
+                    : 'bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-200 rounded-bl-sm border border-gray-100 dark:border-slate-700'
                 }`}>
                   {msg.content}
                 </div>
@@ -96,45 +157,55 @@ export default function ChatWidget() {
             ))}
 
             {loading && (
-              <div className="flex justify-start">
-                <div className="bg-gray-100 dark:bg-slate-800 px-4 py-3 rounded-2xl rounded-bl-sm">
-                  <Loader size={16} className="text-indigo-500 animate-spin" />
+              <div className="flex items-end gap-2 justify-start">
+                <div className="w-7 h-7 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center">
+                  <Brain size={14} className="text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm">
+                  <div className="flex gap-1 items-center">
+                    <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
                 </div>
               </div>
             )}
             <div ref={bottomRef} />
           </div>
 
-          {/* Suggestions (show only at start) */}
+          {/* Suggestions */}
           {messages.length === 1 && (
-            <div className="px-4 pb-2 flex flex-wrap gap-2">
-              {suggestions.map(s => (
-                <button
-                  key={s}
-                  onClick={() => { setInput(s); }}
-                  className="text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-3 py-1.5 rounded-full hover:bg-indigo-100 transition"
-                >
-                  {s}
-                </button>
-              ))}
+            <div className="px-4 py-3 bg-gray-50 dark:bg-slate-950 border-t border-gray-100 dark:border-slate-800">
+              <p className="text-xs text-gray-400 mb-2 font-medium">Quick questions:</p>
+              <div className="flex flex-wrap gap-2">
+                {suggestions.map(s => (
+                  <button
+                    key={s}
+                    onClick={() => setInput(s)}
+                    className="text-xs bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 px-3 py-1.5 rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/40 transition shadow-sm"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
           {/* Input */}
-          <div className="p-3 border-t border-gray-100 dark:border-slate-800 flex gap-2">
+          <div className="p-3 border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex gap-2 items-center">
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && send()}
               placeholder="Ask about your finances..."
-              className="flex-1 text-sm border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-gray-800 dark:text-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="flex-1 text-sm border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-gray-800 dark:text-gray-200 placeholder-gray-400 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
             <button
               onClick={send}
               disabled={loading || !input.trim()}
-              className="w-10 h-10 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-xl flex items-center justify-center transition"
+              className="w-11 h-11 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 rounded-xl flex items-center justify-center transition active:scale-95"
             >
-              <Send size={16} className="text-white" />
+              <Send size={17} className="text-white" />
             </button>
           </div>
         </div>
