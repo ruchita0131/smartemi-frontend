@@ -98,9 +98,9 @@ export default function LoginPage() {
 
         {/* Trust indicators */}
         <div className="flex items-center justify-center gap-4 mt-6 text-xs text-gray-400 dark:text-gray-600">
-          <span>🔒 Secure</span>
-          <span>🤖 AI-powered</span>
-          <span>📊 Free</span>
+          <span>Secure</span>
+          <span>AI-powered</span>
+          <span>Free</span>
         </div>
 
         <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
