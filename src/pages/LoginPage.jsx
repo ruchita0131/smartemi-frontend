@@ -96,6 +96,13 @@ export default function LoginPage() {
           </button>
         </div>
 
+        {/* Render Free Tier Notice */}
+        <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-center">
+          <p className="text-xs text-amber-700 dark:text-amber-400">
+            <strong>Note:</strong> The backend is hosted on a free cloud server. It may take up to <strong>50 seconds</strong> to wake up on the first login attempt. Please be patient!
+          </p>
+        </div>
+
         {/* Trust indicators */}
         <div className="flex items-center justify-center gap-4 mt-6 text-xs text-gray-400 dark:text-gray-600">
           <span>Secure</span>
