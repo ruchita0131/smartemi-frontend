@@ -14,6 +14,13 @@ export default function ScenariosPage() {
 
   useEffect(() => {
     if (!user) return;
+    if (user.id === 'demo') {
+      import('../data/demoData').then(m => {
+        setLoans(m.DEMO_SUMMARY.loans);
+        if (m.DEMO_SUMMARY.loans.length > 0) setSelectedLoan(m.DEMO_SUMMARY.loans[0]);
+      });
+      return;
+    }
     client.get(`/api/users/${user.id}/summary`).then(({ data }) => {
       setLoans(data.loans || []);
       if (data.loans?.length > 0) setSelectedLoan(data.loans[0]);
@@ -24,6 +31,46 @@ export default function ScenariosPage() {
     if (!selectedLoan) return;
     setLoading(true);
     setResult(null);
+
+    if (user.id === 'demo') {
+      setTimeout(() => {
+        const p = selectedLoan.principal;
+        const r = selectedLoan.interest_rate / 12 / 100;
+        const emi = selectedLoan.emi;
+        const original_months = selectedLoan.tenure_months;
+        const original_interest = Math.round((emi * original_months) - p);
+
+        const new_monthly = emi + extraPayment;
+        let balance = p;
+        let new_months = 0;
+        let new_interest = 0;
+
+        while (balance > 0 && new_months < original_months) {
+          const interest = balance * r;
+          new_interest += interest;
+          balance -= (new_monthly - interest);
+          new_months++;
+        }
+
+        const months_saved = Math.max(0, original_months - new_months);
+        const interest_saved = Math.max(0, Math.round(original_interest - new_interest));
+
+        setResult({
+          loan_type: selectedLoan.loan_type,
+          original_months,
+          original_interest,
+          original_closure: 'October 2030',
+          new_months,
+          new_interest: Math.round(new_interest),
+          new_closure: `August ${2026 + Math.ceil(new_months / 12)}`,
+          months_saved,
+          interest_saved
+        });
+        setLoading(false);
+      }, 150);
+      return;
+    }
+
     try {
       const { data } = await client.post(`/api/users/${user.id}/simulate`, {
         loan_id: selectedLoan.id,

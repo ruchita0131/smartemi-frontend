@@ -1,106 +1,92 @@
-# SmartEMI Planner — Frontend
+# SmartEMI Planner — Frontend Dashboard
 
-A React dashboard for AI-powered personal loan optimization.
-
-## Live Links
-
-- Application: https://smartemi-frontend.vercel.app
-- Backend API: https://smartemi-api.onrender.com/docs
-
-## Demo Account
-
-| Field    | Value             |
-|----------|-------------------|
-| Email    | demo@smartemi.in  |
-| Password | demo1234          |
+SmartEMI is an AI-powered personal finance and debt optimization web application built with React 19, Tailwind CSS v4, and Recharts. It connects to a multi-agent LangGraph execution pipeline to analyze user loans, calculate Debt-to-Income (DTI) metrics, simulate prepayment scenarios, and render personalized financial advice.
 
 ---
 
-## Features
+## Live Links
 
-**Dashboard**
-Real-time financial overview with income, total EMI, expenses, and disposable income. Includes a Debt-to-Income ratio health indicator that color-codes the user's financial situation.
+- **Live Web Application:** https://ruchita0131.github.io/smartemi-frontend/
+- **Backend OpenAPI Documentation:** https://smartemi-api.onrender.com/docs
 
-**AI Analysis**
-Animated visualization of the LangGraph pipeline. Each of the 5 agents lights up in sequence as the pipeline runs. Results include financial health score, Avalanche vs Snowball strategy comparison, loan closure projections, and a Gemini AI report with personalized advice.
+---
 
-**Scenario Simulator**
-Interactive slider to simulate extra monthly payments. Shows side-by-side comparison of original vs accelerated repayment timeline, including months saved and total interest saved.
+## Key Features
 
-**AI Chat**
-Floating chat widget on every page. The AI has full access to the user's financial profile and answers questions with specific rupee amounts. Persists conversation history within the session.
-
-**Dark Mode**
-System-aware dark and light mode toggle. Preference is saved to localStorage and persists across sessions.
-
-**Profile Dropdown**
-Navbar displays user initials as an avatar. Clicking opens a dropdown with name, email, and account details.
+1. **Recruiter Demo Mode:** Instant, zero-latency access with pre-configured loan profiles (Home, Personal, Car loans) and simulated LangGraph agent pipeline execution without requiring backend cold-start delays.
+2. **Real-Time Financial Dashboard:** Calculates Debt-to-Income (DTI) health indicators, disposable cash flow, active EMI burdens, and categorized expenses.
+3. **LangGraph 5-Agent Execution Visualizer:** Step-by-step animated visual representation of multi-agent analysis (Data Normalizer, DTI Evaluator, Strategy Comparator, Timeline Forecast, Gemini AI Consultant).
+4. **Interactive Prepayment Simulator:** Real-time EMI acceleration calculator evaluating the Debt Avalanche (highest interest rate first) versus Debt Snowball (lowest balance first) strategies.
+5. **Context-Aware AI Financial Advisor:** Floating chat widget providing tailored guidance based on the user's active loan and expense profile.
 
 ---
 
 ## Tech Stack
 
-| Layer       | Technology                            |
-|-------------|---------------------------------------|
-| Framework   | React 19 with Vite                    |
-| Styling     | Tailwind CSS v4                       |
-| Routing     | React Router v6                       |
-| HTTP Client | Axios with JWT interceptors           |
-| Icons       | Lucide React                          |
-| Charts      | Recharts                              |
-| Deployment  | Vercel                                |
-
----
-
-## Running Locally
-```bash
-git clone https://github.com/ruchita0131/smartemi-frontend
-cd smartemi-frontend
-npm install
-cp .env.example .env.local
-# Set VITE_API_URL in .env.local
-npm run dev
-```
-
-## Environment Variables
-```
-VITE_API_URL=https://smartemi-api.onrender.com
-```
+- **Framework:** React 19 + Vite 7
+- **Styling:** Tailwind CSS v4
+- **Routing:** React Router v7 (HashRouter for static hosting resilience)
+- **Charts:** Recharts
+- **HTTP Client:** Axios with JWT request interceptors
+- **Icons:** Lucide React
 
 ---
 
 ## Project Structure
+
 ```
 smartemi-frontend/
 ├── src/
-│   ├── App.jsx                  # Routes and app shell
+│   ├── App.jsx                  # HashRouter configuration and routes
 │   ├── api/
-│   │   └── client.js            # Axios instance with auth interceptor
+│   │   └── client.js            # Axios client with JWT interceptor
 │   ├── context/
-│   │   ├── AuthContext.jsx      # Global authentication state
-│   │   └── ThemeContext.jsx     # Dark/light mode state
+│   │   ├── AuthContext.jsx      # Global session and demo state
+│   │   └── ThemeContext.jsx     # Dark/light mode theme provider
+│   ├── data/
+│   │   └── demoData.js          # Demo mode dataset (Loans, Expenses, LangGraph Output)
 │   ├── pages/
-│   │   ├── LoginPage.jsx
-│   │   ├── SignupPage.jsx
-│   │   ├── DashboardPage.jsx
-│   │   ├── AnalysisPage.jsx
-│   │   └── ScenariosPage.jsx
+│   │   ├── LoginPage.jsx        # Auth landing with Demo Mode CTA
+│   │   ├── DashboardPage.jsx    # DTI summary, loan & expense manager
+│   │   ├── AnalysisPage.jsx     # LangGraph 5-agent pipeline visualizer
+│   │   └── ScenariosPage.jsx    # Interactive EMI acceleration simulator
 │   └── components/
-│       ├── Navbar.jsx           # Navigation with profile dropdown
-│       ├── SummaryCard.jsx      # Financial metric card
-│       ├── AgentGraph.jsx       # LangGraph pipeline visualization
-│       ├── AddLoanModal.jsx     # Modal form for adding loans
-│       ├── AddExpenseModal.jsx  # Modal form for adding expenses
-│       └── ChatWidget.jsx       # Floating AI chat interface
-├── .env.example
+│       ├── Navbar.jsx           # Top navigation bar
+│       ├── AgentGraph.jsx       # LangGraph agent step visualizer
+│       └── ChatWidget.jsx       # Floating AI chat assistant
 └── package.json
 ```
 
 ---
 
+## Getting Started
+
+### Prerequisites
+- Node.js 20+
+- npm 10+
+
+### Local Setup
+```bash
+git clone https://github.com/ruchita0131/smartemi-frontend.git
+cd smartemi-frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173` in your browser.
+
+---
+
 ## Deployment
 
-Frontend is deployed on Vercel with automatic deployments on push to main.
+Published to GitHub Pages via automated build:
 ```bash
-npx vercel --prod
+npm run build
+npx gh-pages -d dist
 ```
+
+---
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for details.

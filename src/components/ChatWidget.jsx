@@ -33,6 +33,17 @@ export default function ChatWidget() {
     setInput('');
     setLoading(true);
 
+    if (user.id === 'demo') {
+      import('../data/demoData').then(m => {
+        setTimeout(() => {
+          const reply = m.DEMO_CHAT_RESPONSES[Math.floor(Math.random() * m.DEMO_CHAT_RESPONSES.length)];
+          setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
+          setLoading(false);
+        }, 500);
+      });
+      return;
+    }
+
     try {
       const { data } = await client.post(`/api/users/${user.id}/chat`, {
         message: userMsg.content,

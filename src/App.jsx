@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import LoginPage from './pages/LoginPage';
@@ -10,7 +10,8 @@ import ChatWidget from './components/ChatWidget';
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
-  return user ? children : <Navigate to="/login" />;
+  const isDemo = localStorage.getItem('demo') === 'true';
+  return (user || isDemo) ? children : <Navigate to="/login" />;
 }
 
 function AppContent() {
@@ -37,9 +38,9 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <BrowserRouter>
+        <HashRouter>
           <AppContent />
-        </BrowserRouter>
+        </HashRouter>
       </AuthProvider>
     </ThemeProvider>
   );

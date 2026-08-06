@@ -14,14 +14,21 @@ export function AuthProvider({ children }) {
     setUser({ id: userId });
   };
 
+  const loginDemo = () => {
+    localStorage.setItem('user_id', 'demo');
+    localStorage.setItem('demo', 'true');
+    setUser({ id: 'demo', isDemo: true });
+  };
+
   const logout = () => {
     localStorage.removeItem('user_id');
     localStorage.removeItem('access_token');
+    localStorage.removeItem('demo');
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, loginDemo, logout }}>
       {children}
     </AuthContext.Provider>
   );

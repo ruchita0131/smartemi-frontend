@@ -10,7 +10,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loginDemo } = useAuth();
+
+  const handleDemo = () => {
+    loginDemo();
+    navigate('/dashboard');
+  };
   const { dark, toggle } = useTheme();
   const navigate = useNavigate();
 
@@ -52,7 +57,20 @@ export default function LoginPage() {
           <p className="text-gray-500 dark:text-gray-400 mt-1">Your AI-powered debt advisor</p>
         </div>
 
-        {/* Error */}
+        {/* Demo CTA */}
+        <button
+          onClick={handleDemo}
+          className="w-full mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 active:scale-95 text-white font-semibold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
+        >
+          <Brain size={18} />
+          Explore Live Demo — No Login Required
+        </button>
+
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex-1 h-px bg-gray-200 dark:bg-slate-800" />
+          <span className="text-xs text-gray-400">or sign in</span>
+          <div className="flex-1 h-px bg-gray-200 dark:bg-slate-800" />
+        </div>
         {error && (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-lg p-3 mb-4 text-sm">
             {error}

@@ -5,6 +5,8 @@ import Navbar from '../components/Navbar';
 import AgentGraph from '../components/AgentGraph';
 import { Brain, AlertCircle, Loader, Sparkles } from 'lucide-react';
 
+import { DEMO_ANALYSIS } from '../data/demoData';
+
 export default function AnalysisPage() {
   const { user } = useAuth();
   const [running, setRunning] = useState(false);
@@ -23,7 +25,15 @@ export default function AnalysisPage() {
     // Animate through agents
     for (let i = 0; i < 5; i++) {
       setActiveStep(i);
-      await new Promise(r => setTimeout(r, 700));
+      await new Promise(r => setTimeout(r, 600));
+    }
+
+    if (user.id === 'demo') {
+      setResult(DEMO_ANALYSIS);
+      setDone(true);
+      setActiveStep(5);
+      setRunning(false);
+      return;
     }
 
     try {

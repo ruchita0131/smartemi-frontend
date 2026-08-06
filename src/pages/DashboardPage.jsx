@@ -7,6 +7,8 @@ import AddLoanModal from '../components/AddLoanModal';
 import AddExpenseModal from '../components/AddExpenseModal';
 import { TrendingDown, Wallet, CreditCard, PiggyBank, Plus, Trash2 } from 'lucide-react';
 
+import { DEMO_SUMMARY } from '../data/demoData';
+
 export default function DashboardPage() {
   const { user } = useAuth();
   const [summary, setSummary] = useState(null);
@@ -18,6 +20,12 @@ export default function DashboardPage() {
 
   const fetchSummary = () => {
     if (!user) return;
+    if (user.id === 'demo') {
+      setSummary(DEMO_SUMMARY);
+      setIncome(DEMO_SUMMARY.monthly_income);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     client.get(`/api/users/${user.id}/summary`)
       .then(({ data }) => { setSummary(data); setIncome(data.monthly_income || ''); })
